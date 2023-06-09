@@ -6,6 +6,9 @@ import Home from "./pages/Home";
 import AddEmployee from "./employees/addEmployee";
 import EditEmployee from "./employees/EditEmployee";
 import ViewEmployee from "./employees/viewEmployee";
+import SignInForm from "./pages/SignInForm";
+
+// TODO: Work on the authentication (and change the routing)
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* route in order to view the login page */}
+          <Route path="/signin" element={<SignInForm />} />
           <Route path="/addEmployee" element={<AddEmployee />} />
           <Route path="/editEmployee/:id" element={<EditEmployee />} />
           <Route path="/viewEmployee/:id" element={<ViewEmployee />} />

@@ -19,8 +19,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 interface User {
-  firstName: String;
-  lastName: String;
+  fullName: String;
+  email: String;
   jobTitle: String;
   afm: String;
   salary: Number;
@@ -28,8 +28,8 @@ interface User {
 }
 
 const schema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
+  fullName: yup.string().required(),
+  email: yup.string().email().required(),
   jobTitle: yup.string().required(),
   afm: yup.string().required(),
   salary: yup.number().required(),
@@ -53,8 +53,8 @@ function AddEmployee() {
   const onSubmit = async (data: User) => {
     await axios
       .post("http://localhost:8080/employee/addEmployee", {
-        firstName: data.firstName,
-        lastName: data.lastName,
+        fullName: data.fullName,
+        email: data.email,
         jobTitle: data.jobTitle,
         afm: data.afm,
         salary: data.salary,
@@ -79,23 +79,23 @@ function AddEmployee() {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
-          {...register("firstName")}
+          {...register("fullName")}
           variant="outlined"
           margin="normal"
-          label="First Name"
-          helperText={errors.firstName?.message}
-          error={!!errors.firstName?.message}
+          label="Full Name"
+          helperText={errors.fullName?.message}
+          error={!!errors.fullName?.message}
           fullWidth
           required
           style={{ marginBottom: "12px" }}
         />
         <TextField
-          {...register("lastName")}
+          {...register("email")}
           variant="outlined"
           margin="normal"
-          label="Last Name"
-          helperText={errors.lastName?.message}
-          error={!!errors.lastName?.message}
+          label="Email"
+          helperText={errors.email?.message}
+          error={!!errors.email?.message}
           fullWidth
           required
           style={{ marginBottom: "12px" }}

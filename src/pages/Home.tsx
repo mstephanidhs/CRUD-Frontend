@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import axios from "axios";
 
@@ -18,8 +18,8 @@ import {
 
 interface User {
   id: Number;
-  firstName: String;
-  lastName: String;
+  fullName: String;
+  email: String;
   jobTitle: String;
   afm: String;
   salary: Number;
@@ -53,8 +53,8 @@ function Home() {
         <TableHead>
           <TableRow>
             <TableCell>Id</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
+            <TableCell>Full Name</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell>Job Title</TableCell>
             <TableCell>TIN</TableCell>
             <TableCell>Salary (in €)</TableCell>
@@ -68,8 +68,8 @@ function Home() {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell>{String(user.id)}</TableCell>
-              <TableCell>{user.firstName}</TableCell>
-              <TableCell>{user.lastName}</TableCell>
+              <TableCell>{user.fullName}</TableCell>
+              <TableCell>{user.email}</TableCell>
               <TableCell>{user.jobTitle}</TableCell>
               <TableCell>{user.afm}</TableCell>
               <TableCell>{String(user.salary)}</TableCell>

@@ -7,20 +7,11 @@ import axios from "axios";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-  Box,
-} from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { Container, Typography, TextField, Button, Box } from "@mui/material";
 
 interface User {
-  firstName: String;
-  lastName: String;
+  fullName: String;
+  email: String;
   jobTitle: String;
   afm: String;
   salary: Number;
@@ -28,8 +19,8 @@ interface User {
 }
 
 const schema = yup.object().shape({
-  firstName: yup.string(),
-  lastName: yup.string(),
+  fullName: yup.string(),
+  email: yup.string().email(),
   jobTitle: yup.string(),
   afm: yup.string(),
   salary: yup.number(),
@@ -37,13 +28,12 @@ const schema = yup.object().shape({
 });
 
 function EditEmployee() {
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [user, setUser] = useState<User>({
-    firstName: "",
-    lastName: "",
+    fullName: "",
+    email: "",
     jobTitle: "",
     afm: "",
     salary: 0,
@@ -60,10 +50,6 @@ function EditEmployee() {
     getEmployee();
   }, []);
 
-  const handleVisibilityPassword = (): void => {
-    setShowPassword((prevPasswordState) => !prevPasswordState);
-  };
-
   const getEmployee = async () => {
     const employee = await axios.get(`http://localhost:8080/employee/${id}`);
     setUser(employee.data);
@@ -77,8 +63,8 @@ function EditEmployee() {
   const onSubmit = async (data: User) => {
     await axios
       .put(`http://localhost:8080/employee/${id}`, {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        fullName: user.fullName,
+        email: user.email,
         jobTitle: user.jobTitle,
         afm: user.afm,
         salary: user.salary,
@@ -103,29 +89,29 @@ function EditEmployee() {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
-          {...register("firstName")}
+          {...register("fullName")}
           variant="outlined"
           margin="normal"
-          label="First Name"
-          helperText={errors.firstName?.message}
-          error={!!errors.firstName?.message}
+          label="Full Name"
+          helperText={errors.fullName?.message}
+          error={!!errors.fullName?.message}
           fullWidth
           required
           style={{ marginBottom: "12px" }}
-          value={user.firstName}
+          value={user.fullName}
           onChange={onInputChange}
         />
         <TextField
-          {...register("lastName")}
+          {...register("email")}
           variant="outlined"
           margin="normal"
-          label="Last Name"
-          helperText={errors.lastName?.message}
-          error={!!errors.lastName?.message}
+          label="email"
+          helperText={errors.email?.message}
+          error={!!errors.email?.message}
           fullWidth
           required
           style={{ marginBottom: "12px" }}
-          value={user.lastName}
+          value={user.email}
           onChange={onInputChange}
         />
         <TextField
@@ -167,35 +153,6 @@ function EditEmployee() {
           value={user.salary}
           onChange={onInputChange}
         />
-        <TextField
-          {...register("password")}
-          variant="outlined"
-          margin="normal"
-          label="Password"
-          helperText={errors.password?.message}
-          error={!!errors.password?.message}
-          type={showPassword ? "text" : "password"}
-          fullWidth
-          value={user.password}
-          onChange={onInputChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                {showPassword ? (
-                  <VisibilityIcon
-                    style={{ fontSize: "16px", cursor: "pointer" }}
-                    onClick={handleVisibilityPassword}
-                  />
-                ) : (
-                  <VisibilityOffIcon
-                    style={{ fontSize: "16px", cursor: "pointer" }}
-                    onClick={handleVisibilityPassword}
-                  />
-                )}
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
         <Box
           component="span"
           m={1}

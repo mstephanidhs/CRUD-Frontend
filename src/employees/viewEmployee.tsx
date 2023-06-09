@@ -7,8 +7,8 @@ import { Paper, Chip, TextField, Button } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 interface User {
-  firstName: String;
-  lastName: String;
+  fullName: String;
+  email: String;
   jobTitle: String;
   afm: String;
   salary: Number;
@@ -17,8 +17,8 @@ interface User {
 
 const ViewEmployee = () => {
   const [user, setUser] = useState<User>({
-    firstName: "",
-    lastName: "",
+    fullName: "",
+    email: "",
     jobTitle: "",
     afm: "",
     salary: 0,
@@ -63,9 +63,9 @@ const ViewEmployee = () => {
             InputProps={{ readOnly: true }}
             fullWidth
             size="small"
-            label="First Name"
+            label="Full Name"
             style={{ marginBottom: "10px" }}
-            value={user.firstName}
+            value={user.fullName}
           />
         </p>
         <p>
@@ -75,9 +75,9 @@ const ViewEmployee = () => {
             InputProps={{ readOnly: true }}
             fullWidth
             size="small"
-            label="Last Name"
+            label="Email"
             style={{ marginBottom: "10px" }}
-            value={user.lastName}
+            value={user.email}
           />
         </p>
         <p>
