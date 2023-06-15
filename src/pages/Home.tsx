@@ -30,6 +30,7 @@ function Home() {
   const [users, setUsers] = useState<Array<User>>([]);
   const navigate = useNavigate();
 
+  // whenever the page is requested, load the table of employees
   useEffect(() => {
     loadEmployees();
   }, []);
@@ -85,6 +86,7 @@ function Home() {
           </TableRow>
         </TableHead>
         <TableBody>
+          {/* map through the users in order to display them in the table */}
           {users.map((user, userIndex) => (
             <TableRow
               key={userIndex}

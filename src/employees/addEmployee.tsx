@@ -31,7 +31,7 @@ const schema = yup.object().shape({
   fullName: yup.string().required(),
   email: yup.string().email().required(),
   jobTitle: yup.string().required(),
-  afm: yup.string().required(),
+  afm: yup.number().required(),
   salary: yup.number().required(),
   password: yup.string().required().min(8).max(120),
 });
@@ -40,6 +40,7 @@ function AddEmployee() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  // in order for the user to have access, it must be authenticated
   useEffect(() => {
     const token = localStorage.getItem("user-token");
 
@@ -69,7 +70,7 @@ function AddEmployee() {
           fullName: data.fullName,
           email: data.email,
           jobTitle: data.jobTitle,
-          afm: data.afm,
+          afm: data.afm.toString(),
           salary: data.salary,
           password: data.password,
           role: "USER",

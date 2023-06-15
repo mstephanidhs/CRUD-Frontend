@@ -27,6 +27,7 @@ interface childProps {
   login: (value: string) => void;
 }
 
+// using yup for the form implementation
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required().min(8).max(120),
@@ -40,8 +41,10 @@ function SignInForm(props: childProps) {
     formState: { errors },
   } = useForm<IFormInput>({ resolver: yupResolver(schema) });
 
+  // using state for the password display
   const [showPassword, setShowPassword] = useState(false);
 
+  // function executed when the form is submitted
   const onSubmit = async (data: IFormInput) => {
     const employee = await axios.post(
       "http://localhost:8080/auth/authenticate",

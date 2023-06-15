@@ -18,6 +18,8 @@ function App() {
     localStorage.getItem("user-state")
   );
 
+  // Used the "Lift the state up"/localStorage technique cause of the small portion of data
+
   const loginHandler = (value: string) => {
     setUser(value);
   };
@@ -26,11 +28,13 @@ function App() {
     setUser(value);
   };
 
+  // routing
   return (
     <div>
       <Router>
         <Navbar logout={logoutHandler} userState={user} />
         <Routes>
+          {/* if the requested route does not exist, redirect always to the sign in page */}
           <Route path="*" element={<Navigate to="/signin" replace />} />
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignInForm login={loginHandler} />} />
