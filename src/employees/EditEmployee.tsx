@@ -51,8 +51,20 @@ function EditEmployee() {
   }, []);
 
   const getEmployee = async () => {
-    const employee = await axios.get(`http://localhost:8080/employee/${id}`);
-    setUser(employee.data);
+    const token = localStorage.getItem("user-token");
+    const employee = await axios
+      .get(`http://localhost:8080/employee/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((employee) => {
+        setUser(employee.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
+      });
   };
 
   const onInputChange = (e: React.SyntheticEvent) => {
@@ -61,20 +73,31 @@ function EditEmployee() {
   };
 
   const onSubmit = async (data: User) => {
+    const token = localStorage.getItem("user-token");
     await axios
-      .put(`http://localhost:8080/employee/${id}`, {
-        fullName: user.fullName,
-        email: user.email,
-        jobTitle: user.jobTitle,
-        afm: user.afm,
-        salary: user.salary,
-        password: user.password,
+      .put(
+        `http://localhost:8080/employee/${id}`,
+        {
+          fullName: user.fullName,
+          email: user.email,
+          jobTitle: user.jobTitle,
+          afm: user.afm,
+          salary: user.salary,
+          password: user.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        navigate("/");
       })
-      .then((res) => {
-        console.log(res);
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
       });
-
-    navigate("/");
   };
 
   return (

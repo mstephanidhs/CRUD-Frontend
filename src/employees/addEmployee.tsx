@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
@@ -40,6 +40,15 @@ function AddEmployee() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("user-token");
+
+    if (!token) {
+      alert("You must sign in first!");
+      return navigate("/signin");
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -51,20 +60,33 @@ function AddEmployee() {
   };
 
   const onSubmit = async (data: User) => {
-    await axios
-      .post("http://localhost:8080/employee/addEmployee", {
-        fullName: data.fullName,
-        email: data.email,
-        jobTitle: data.jobTitle,
-        afm: data.afm,
-        salary: data.salary,
-        password: data.password,
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    const token = localStorage.getItem("user-token");
 
-    navigate("/");
+    await axios
+      .post(
+        "http://localhost:8080/auth/register",
+        {
+          fullName: data.fullName,
+          email: data.email,
+          jobTitle: data.jobTitle,
+          afm: data.afm,
+          salary: data.salary,
+          password: data.password,
+          role: "USER",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
+      });
   };
 
   return (

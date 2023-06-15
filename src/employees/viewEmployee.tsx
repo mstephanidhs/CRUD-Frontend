@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -24,6 +24,7 @@ const ViewEmployee = () => {
     salary: 0,
     password: "",
   });
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -32,8 +33,20 @@ const ViewEmployee = () => {
   }, []);
 
   const loadEmployee = async () => {
-    const employee = await axios.get(`http://localhost:8080/employee/${id}`);
-    setUser(employee.data);
+    const token = localStorage.getItem("user-token");
+    await axios
+      .get(`http://localhost:8080/employee/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((employee) => {
+        setUser(employee.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
+      });
   };
 
   return (

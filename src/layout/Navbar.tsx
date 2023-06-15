@@ -1,4 +1,4 @@
-import { Route, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import {
   AppBar,
@@ -10,7 +10,12 @@ import {
 } from "@mui/material";
 import AppShortcutIcon from "@mui/icons-material/AppShortcut";
 
-const Navbar = () => {
+interface childProps {
+  userState: string | null;
+  logout: (value: string) => void;
+}
+
+const Navbar = (props: childProps) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -30,16 +35,32 @@ const Navbar = () => {
         >
           CRUD Project
         </Typography>
-        <Stack direction="row" spacing={2}>
-          <Button
-            component={RouterLink}
-            to="/addEmployee"
-            color="inherit"
-            sx={{ fontWeight: "bold", letterSpacing: "1px" }}
-          >
-            Add Employee
-          </Button>
-        </Stack>
+
+        {props.userState === "true" ? (
+          <Stack direction="row" spacing={2}>
+            <Button
+              component={RouterLink}
+              to="/addEmployee"
+              color="inherit"
+              sx={{ fontWeight: "500", letterSpacing: "1px" }}
+            >
+              Add Employee
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/signin"
+              color="inherit"
+              onClick={() => {
+                localStorage.clear();
+                localStorage.setItem("user-state", "false");
+                props.logout("false");
+              }}
+              sx={{ fontWeight: "bold", letterSpacing: "1px" }}
+            >
+              Log Out
+            </Button>
+          </Stack>
+        ) : null}
       </Toolbar>
     </AppBar>
   );

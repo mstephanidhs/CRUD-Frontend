@@ -23,12 +23,16 @@ interface IFormInput {
   password: string;
 }
 
+interface childProps {
+  login: (value: string) => void;
+}
+
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required().min(8).max(120),
 });
 
-function SignInForm() {
+function SignInForm(props: childProps) {
   const navigate = useNavigate();
   const {
     register,
@@ -39,10 +43,27 @@ function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data: IFormInput) => {
-    await axios.post("http://localhost:8080/sign/authenticate", {
-      email: data.email,
-      password: data.password,
-    });
+    const employee = await axios.post(
+      "http://localhost:8080/auth/authenticate",
+      {
+        email: data.email,
+        password: data.password,
+      }
+    );
+
+    const token = employee.data.token;
+
+    if (!token) {
+      alert("Unable to login. Please try again!");
+      return;
+    }
+
+    localStorage.clear();
+    localStorage.setItem("user-token", token);
+    localStorage.setItem("user-state", "true");
+    props.login("true");
+
+    navigate("/");
   };
 
   const handleVisibilityPassword = (): void => {

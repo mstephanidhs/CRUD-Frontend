@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -28,19 +28,42 @@ interface User {
 
 function Home() {
   const [users, setUsers] = useState<Array<User>>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadEmployees();
   }, []);
 
   const loadEmployees = async () => {
-    const employees = await axios.get("http://localhost:8080/employee/getAll");
-    setUsers(employees.data);
+    const token = localStorage.getItem("user-token");
+    console.log(token);
+
+    await axios
+      .get("http://localhost:8080/employee/getAll", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((employees) => setUsers(employees.data))
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
+      });
   };
 
   const deleteEmployee = async (id: Number) => {
-    await axios.delete(`http://localhost:8080/employee/${id}`);
-    loadEmployees();
+    const token = localStorage.getItem("user-token");
+    await axios
+      .delete(`http://localhost:8080/employee/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => loadEmployees())
+      .catch((error) => {
+        if (error.response.status === 403) navigate("/signin");
+        alert("You must be logged in!");
+      });
   };
 
   return (
