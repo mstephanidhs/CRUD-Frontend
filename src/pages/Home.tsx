@@ -36,7 +36,7 @@ function Home() {
   }, []);
 
   const loadEmployees = async () => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
     console.log(token);
 
     await axios
@@ -53,7 +53,7 @@ function Home() {
   };
 
   const deleteEmployee = async (id: Number) => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
     await axios
       .delete(`http://localhost:8080/employee/${id}`, {
         headers: {

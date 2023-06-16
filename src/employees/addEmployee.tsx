@@ -38,11 +38,12 @@ const schema = yup.object().shape({
 
 function AddEmployee() {
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const navigate = useNavigate();
 
   // in order for the user to have access, it must be authenticated
   useEffect(() => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
 
     if (!token) {
       alert("You must sign in first!");
@@ -61,7 +62,7 @@ function AddEmployee() {
   };
 
   const onSubmit = async (data: User) => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
 
     await axios
       .post(
@@ -81,12 +82,19 @@ function AddEmployee() {
           },
         }
       )
-      .then(() => {
+      .then((res) => {
+        if (res.data.token === null) {
+          setEmailError(true);
+          return;
+        }
         navigate("/");
       })
       .catch((error) => {
-        if (error.response.status === 403) navigate("/signin");
-        alert("You must be logged in!");
+        if (error.response.status === 403) {
+          navigate("/signin");
+          alert("You must be logged in!");
+        }
+        console.log(error);
       });
   };
 
@@ -184,6 +192,11 @@ function AddEmployee() {
             ),
           }}
         ></TextField>
+        {emailError ? (
+          <Typography paragraph sx={{ color: "#d11a2a", fontSize: "14px" }}>
+            * Email already exists
+          </Typography>
+        ) : null}
         <Box
           component="span"
           m={1}

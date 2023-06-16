@@ -51,7 +51,7 @@ function EditEmployee() {
   }, []);
 
   const getEmployee = async () => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
     const employee = await axios
       .get(`http://localhost:8080/employee/${id}`, {
         headers: {
@@ -73,7 +73,7 @@ function EditEmployee() {
   };
 
   const onSubmit = async (data: User) => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
     await axios
       .put(
         `http://localhost:8080/employee/${id}`,

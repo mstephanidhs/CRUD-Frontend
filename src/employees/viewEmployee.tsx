@@ -33,7 +33,7 @@ const ViewEmployee = () => {
   }, []);
 
   const loadEmployee = async () => {
-    const token = localStorage.getItem("user-token");
+    const token = sessionStorage.getItem("user-token");
     await axios
       .get(`http://localhost:8080/employee/${id}`, {
         headers: {

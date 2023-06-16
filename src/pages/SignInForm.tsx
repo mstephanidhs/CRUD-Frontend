@@ -61,9 +61,9 @@ function SignInForm(props: childProps) {
       return;
     }
 
-    localStorage.clear();
-    localStorage.setItem("user-token", token);
-    localStorage.setItem("user-state", "true");
+    sessionStorage.clear();
+    sessionStorage.setItem("user-token", token);
+    sessionStorage.setItem("user-state", "true");
     props.login("true");
 
     navigate("/");

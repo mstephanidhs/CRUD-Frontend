@@ -15,7 +15,7 @@ import SignInForm from "./pages/SignInForm";
 
 function App() {
   const [user, setUser] = useState<string | null>(
-    localStorage.getItem("user-state")
+    sessionStorage.getItem("user-state")
   );
 
   // Used the "Lift the state up"/localStorage technique cause of the small portion of data
