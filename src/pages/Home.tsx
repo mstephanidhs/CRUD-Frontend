@@ -37,7 +37,6 @@ function Home() {
 
   const loadEmployees = async () => {
     const token = sessionStorage.getItem("user-token");
-    console.log(token);
 
     await axios
       .get("http://localhost:8080/employee/getAll", {

@@ -40,6 +40,14 @@ const Navbar = (props: childProps) => {
           <Stack direction="row" spacing={2}>
             <Button
               component={RouterLink}
+              to="/"
+              color="inherit"
+              sx={{ fontWeight: "500", letterSpacing: "1px" }}
+            >
+              Home
+            </Button>
+            <Button
+              component={RouterLink}
               to="/addEmployee"
               color="inherit"
               sx={{ fontWeight: "500", letterSpacing: "1px" }}
@@ -51,8 +59,8 @@ const Navbar = (props: childProps) => {
               to="/signin"
               color="inherit"
               onClick={() => {
-                localStorage.clear();
-                localStorage.setItem("user-state", "false");
+                sessionStorage.clear();
+                sessionStorage.setItem("user-state", "false");
                 props.logout("false");
               }}
               sx={{ fontWeight: "bold", letterSpacing: "1px" }}
